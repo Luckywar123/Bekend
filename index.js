@@ -19,6 +19,9 @@ const connection = mysql.createConnection({
   password: process.env.PASSWORD,
   database: process.env.DATABASE, // Replace with your database name
   port: process.env.PORT,
+  ssl: {
+    ca: fs.readFileSync("ca-certificate.crt"),
+  },
   multipleStatements: true, 
 });
 
