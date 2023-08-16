@@ -133,12 +133,14 @@ app.post("/history", async (req, res) => {
           where: { idSKU },
           transaction,
         });
+
+        await Kasir.destroy({
+          where: {}
+        });
       }
 
       // After successful transaction, delete all data from the Kasir table
-      await Kasir.destroy({
-        where: {}
-      });
+
 
     });
 
