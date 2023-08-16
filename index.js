@@ -134,7 +134,7 @@ app.post('/insert-history', async (req, res) => {
       }
 
       // Delete all data from the kasir table
-      await Kasir.destroy({ truncate: true, transaction });
+      await Kasir.destroy({ truncate: true});
     });
 
     res.status(200).json({ message: 'Transaction added to history successfully' });
@@ -143,6 +143,8 @@ app.post('/insert-history', async (req, res) => {
     res.status(500).json({ error: 'Error inserting data into history table' });
   }
 });
+
+
 
 // Fetch history data
 app.get('/history', async (req, res) => {
