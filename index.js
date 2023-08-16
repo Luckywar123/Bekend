@@ -99,7 +99,7 @@ app.get("/return-items", async (req, res) => {
   }
 });
 
-app.post("/insert-history", async (req, res) => {
+app.post("/history", async (req, res) => {
   const { items } = req.body;
 
   if (!items || !Array.isArray(items) || items.length === 0) {
