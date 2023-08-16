@@ -16,8 +16,8 @@ sequelize
 
 // Import and initialize User model
 const User = require('./models/User')(sequelize);
-const Product = require('./models/Product')(sequelize);
-const Sku = require('./models/Sku')(sequelize);
+const Product = require('./models/product')(sequelize);
+const Sku = require('./models/sku')(sequelize);
 const History = require('./models/History')(sequelize); // Import the History model
 const Kasir = require('./models/Kasir')(sequelize);
 const ReturnItem = require('./models/ReturnItem')(sequelize);
