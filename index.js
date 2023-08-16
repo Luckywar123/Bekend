@@ -99,53 +99,53 @@ app.get("/return-items", async (req, res) => {
   }
 });
 
-app.post('/insert-history', async (req, res) => {
+app.post("/insert-history", async (req, res) => {
   const { items } = req.body;
 
   if (!items || !Array.isArray(items) || items.length === 0) {
-    return res.status(400).json({ error: 'Invalid data provided' });
+    return res.status(400).json({ error: "Invalid data provided" });
   }
 
   // Get current date
-  const currentDate = new Date().toISOString().split('T')[0];
+  const currentDate = new Date().toISOString().split("T")[0];
 
   try {
     // Start a new Sequelize transaction
     await sequelize.transaction(async (transaction) => {
       for (const item of items) {
-        const { idBarang, jumlah, idSKU, idTransaksi, jenisTransaksi } = item;
+        const { idBarang, jumlah, idSKU, jenisTransaksi } = item;
 
         // Insert data into history table
-        await History.create({
-          tanggal: currentDate,
-          jumlah,
-          idTransaksi,
-          idBarang,
-          idSKU,
-          jenis_transaksi: jenisTransaksi,
-        }, { transaction });
+        await History.create(
+          {
+            tanggal: currentDate,
+            jumlah,
+            idBarang,
+            idSKU,
+            jenis_transaksi: jenisTransaksi,
+          },
+          { transaction }
+        );
 
         // Update SKU quantity
-        await Sku.decrement('stok', {
+        await Sku.decrement("stok", {
           by: jumlah,
           where: { idSKU },
           transaction,
         });
       }
+
+      // After successful transaction, delete all data from the Kasir table
+      await Kasir.destroy({ where: {}, truncate: true, transaction });
     });
 
-
-    res.status(200).json({ message: 'Transaction added to history successfully' });
-        // Delete all data from the kasir table after successful transaction
-        await Kasir.destroy({ where: {}, truncate: true });
-
+    res.status(200).json({ message: "Transaction added to history successfully" });
   } catch (error) {
-    console.error('Error inserting data into history table:', error);
-    res.status(500).json({ error: 'Error inserting data into history table' });
+    console.error("Error inserting data into history table:", error);
+    res.status(500).json({ error: "Error inserting data into history table" });
   }
-}
+});
 
-);
 
 // Fetch history data
 app.get('/history', async (req, res) => {
