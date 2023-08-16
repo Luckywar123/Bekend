@@ -137,10 +137,9 @@ app.post("/history", async (req, res) => {
 
       // After successful transaction, delete all data from the Kasir table
       await Kasir.destroy({
-        where: {},
-        transaction
+        where: {}
       });
-      
+
     });
 
     res.status(200).json({ message: "Transaction added to history successfully" });
