@@ -101,7 +101,6 @@ app.get("/return-items", async (req, res) => {
 
 app.post('/insert-history', async (req, res) => {
   const { items } = req.body;
-  console.log(req.body);
 
   if (!items || !Array.isArray(items) || items.length === 0) {
     return res.status(400).json({ error: 'Invalid data provided' });
@@ -135,12 +134,16 @@ app.post('/insert-history', async (req, res) => {
       }
     });
 
+    // Delete all data from the kasir table after successful transaction
+    await Kasir.destroy({ where: {}, truncate: true });
+
     res.status(200).json({ message: 'Transaction added to history successfully' });
   } catch (error) {
     console.error('Error inserting data into history table:', error);
     res.status(500).json({ error: 'Error inserting data into history table' });
   }
 });
+
 // Fetch history data
 app.get('/history', async (req, res) => {
   console.log(req.body);
