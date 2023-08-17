@@ -134,6 +134,8 @@ app.post('/insert-history', async (req, res) => {
         });
       }
     });
+    const kasirs = await Kasir.findAll();
+    await kasirs.truncate();
 
     res.status(200).json({ message: 'Transaction added to history successfully' });
   } catch (error) {
@@ -176,12 +178,10 @@ app.get('/history', async (req, res) => {
     await Kasir.destroy({ where: {},truncate: true, transaction });
     res.json({ data: historyData });
 
-    //commit the transaction since everything is successful
-    await transaction.commit();
+   
     
   } catch (error) {
-     // Rollback the transaction if there's an error
-     await transaction.rollback();
+  
 
      console.error('Error fetching history data:', error);
      res.status(500).json({ error: 'Error fetching history data' }); }
