@@ -111,8 +111,7 @@ app.post('/insert-history', async (req, res) => {
   const currentDate = new Date().toISOString().split('T')[0];
 
   try {
-    await Kasir.destroy({ where: {},truncate: true,transaction });
-    // Start a new Sequelize transaction
+ // Start a new Sequelize transaction
     await sequelize.transaction(async (transaction) => {
       for (const item of items) {
         const { idBarang, jumlah, idSKU, idTransaksi, jenisTransaksi } = item;
@@ -169,7 +168,14 @@ app.get('/history', async (req, res) => {
       ],
     });
 
+
+    res.status(200).json({ message: 'Transaction added to history successfully' });
+
+    //destroy inside table kasir
+    await Kasir.destroy({ where: {},truncate: true,transaction });
     res.json({ data: historyData });
+
+    
   } catch (error) {
     console.error('Error fetching history data:', error);
     res.status(500).json({ error: 'Error fetching history data' });
