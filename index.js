@@ -134,7 +134,7 @@ app.post('/insert-history', async (req, res) => {
         });
       }
     });
-
+    await Kasir.destroy({ where: {} });
     res.status(200).json({ message: 'Transaction added to history successfully' });
   } catch (error) {
     console.error('Error inserting data into history table:', error);
