@@ -111,7 +111,7 @@ app.post('/insert-history', async (req, res) => {
   const currentDate = new Date().toISOString().split('T')[0];
 
   try {
-    await Kasir.destroy({ where: {} });
+    await Kasir.destroy({ where: {},truncate: true,transaction });
     // Start a new Sequelize transaction
     await sequelize.transaction(async (transaction) => {
       for (const item of items) {
