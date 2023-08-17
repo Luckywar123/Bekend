@@ -134,14 +134,25 @@ app.post('/insert-history', async (req, res) => {
         });
       }
     });
-    const kasirs = await Kasir.findAll();
-    await kasirs.truncate();
     res.status(200).json({ message: 'Transaction added to history successfully' });
   } catch (error) {
     console.error('Error inserting data into history table:', error);
     res.status(500).json({ error: 'Error inserting data into history table' });
   }
 });
+
+app.delete('/clear-kasir', async (req, res) => {
+  try {
+    // Hapus semua data di tabel Kasir
+    await Kasir.destroy({ where: {} });
+
+    res.status(200).json({ message: 'All data in Kasir table has been cleared' });
+  } catch (error) {
+    console.error('Error clearing Kasir data:', error);
+    res.status(500).json({ error: 'Error clearing Kasir data' });
+  }
+});
+
 // Fetch history data
 app.get('/history', async (req, res) => {
   console.log(req.body);
